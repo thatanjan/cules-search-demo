@@ -1,88 +1,62 @@
 import { nanoid } from 'nanoid'
 
-import { Box, chakra, Flex, Text, HStack } from '@chakra-ui/react'
-
-const EnterIcon = (props) => {
-	return (
-		<chakra.svg
-			strokeWidth='2px'
-			width='16px'
-			height='16px'
-			viewBox='0 0 20 20'
-			{...props}
-		>
-			<g
-				stroke='currentColor'
-				fill='none'
-				fillRule='evenodd'
-				strokeLinecap='round'
-				strokeLinejoin='round'
-			>
-				<path d='M18 3v4c0 2-2 4-4 4H2' />
-				<path d='M8 17l-6-6 6-6' />
-			</g>
-		</chakra.svg>
-	)
-}
+import {
+	Box,
+	Image,
+	chakra,
+	Flex,
+	Text,
+	HStack,
+	AspectRatio,
+	Grid,
+	VStack,
+} from '@chakra-ui/react'
 
 const SearchResult = ({ searchResults, onClose }) => {
-	const components = searchResults.map(
-		({ title, slug, createdAt, totalViews, readingTime, description }) => (
-			<Box
-				key={nanoid()}
-				_hover={{
-					background: 'teal.500',
-					color: 'white',
-					cursor: 'pointer',
-				}}
-			>
-				<Flex
-					sx={{
-						minH: 16,
-						mt: 2,
-						px: 4,
-						py: 2,
-						alignItems: 'center',
-						rounded: 'lg',
-						w: '100%',
+	return (
+		<Grid
+			sx={{
+				gridRowGap: '1rem',
+			}}
+		>
+			{searchResults.map(({ title, plot, poster }) => (
+				<Box
+					key={nanoid()}
+					_hover={{
+						background: 'teal.500',
+						color: 'white',
+						cursor: 'pointer',
 					}}
+					p='.5rem 1rem'
 				>
-					<Flex
+					<Grid
 						sx={{
-							flexGrow: '1',
-							flexDirection: 'column',
+							gridTemplateColumns: '50px 1fr',
+							gridColumnGap: '1rem',
+							height: '70px',
+							overflow: 'hidden',
 						}}
 					>
-						<Text fontWeight='semibold' fontSize='lg' noOfLines={2}>
-							{title}
-						</Text>
-
-						<Text opacity='0.7' noOfLines={1} mt='.5rem'>
-							{description}
-						</Text>
-
-						<HStack
-							spacing='1rem'
-							wrap='wrap'
-							textTransform='uppercase'
-							flexBasis='100%'
-							fontSize='xs'
-							mt='1rem'
-						>
-							<Text>{new Date(createdAt).toDateString()}</Text>
-							<Text>{totalViews} views</Text>
-							<Text>{readingTime}</Text>
-						</HStack>
-					</Flex>
-					<Box>
-						<EnterIcon ml='1rem' boxSize='1rem' />
-					</Box>
-				</Flex>
-			</Box>
-		)
+						<Box>
+							<Image
+								src={poster}
+								alt=''
+								sx={{
+									width: '100%',
+									height: '100%',
+									objectFit: 'cover',
+								}}
+							/>
+						</Box>
+						<VStack align='start'>
+							<Text noOfLines={1}>{title}</Text>
+							<Text noOfLines={1}>{plot}</Text>
+						</VStack>
+					</Grid>
+				</Box>
+			))}
+		</Grid>
 	)
-
-	return components
 }
 
 export default SearchResult

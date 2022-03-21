@@ -1,33 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 
-import {
-	Box,
-	Modal,
-	ModalOverlay,
-	ModalContent,
-	ModalBody,
-	chakra,
-	Flex,
-	Center,
-	useColorMode,
-} from '@chakra-ui/react'
+import { Box, chakra, Flex, Center } from '@chakra-ui/react'
 
 import { SearchIcon } from '@chakra-ui/icons'
 
 import SearchResult from './SearchResult'
 
-const Search = ({ onClose, isOpen }) => {
+const Search = () => {
 	const [queryText, setQueryText] = useState('')
 
 	const [searchResults, setSearchResults] = useState([])
-
-	const { colorMode } = useColorMode()
-
-	const backgroundColor = {
-		light: 'white',
-		dark: 'gray.700',
-	}
 
 	const handleChange = (e) => setQueryText(e.target.value)
 
@@ -45,25 +28,34 @@ const Search = ({ onClose, isOpen }) => {
 			})
 
 			setSearchResults(data)
-			// console.log(data)
 		})()
+
+		console.log(queryText)
 	}, [queryText])
 
 	return (
-		<Box pos='relative' maxW='500px' m='0 auto'>
-			<Flex pos='relative' zIndex='10' align='center' mt='2rem' h='4rem'>
+		<Box
+			rounded='lg'
+			overflow='hidden'
+			bg='transparent'
+			shadow='lg'
+			maxW='600px'
+			width='90%'
+			mx='auto'
+			mt='1rem'
+		>
+			<Flex pos='relative' align='stretch'>
 				<chakra.input
 					autoComplete='off'
 					autoCorrect='off'
 					spellCheck='false'
+					maxLength={64}
 					sx={{
 						w: '100%',
+						h: '68px',
 						pl: '68px',
-						h: '100%',
 						fontWeight: 'medium',
 						outline: 0,
-						borderRadius: '5rem',
-						bg: backgroundColor[colorMode],
 					}}
 					placeholder='Search blogs'
 					value={queryText}
@@ -74,26 +66,16 @@ const Search = ({ onClose, isOpen }) => {
 				</Center>
 			</Flex>
 
-			{queryText && (
-				<Box
-					sx={{
-						bg: backgroundColor[colorMode],
-						pos: 'absolute',
-						w: '100%',
-						top: '50%',
-						left: 0,
-						pt: '2rem',
-						px: '1rem',
-					}}
-				>
+			{searchResults.length > 0 && (
+				<Box maxH='70vh' p='0' overflowY='auto'>
 					<Box
 						sx={{
-							maxH: '30rem',
-							overflowY: 'auto',
-							borderTop: '1px solid white',
+							px: 4,
 						}}
 					>
-						<SearchResult searchResults={searchResults} />
+						<Box as='ul' borderTopWidth='1px' pt={2} pb={4}>
+							<SearchResult searchResults={searchResults} />
+						</Box>
 					</Box>
 				</Box>
 			)}
